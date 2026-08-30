@@ -1,0 +1,29 @@
+[project]
+name = "defiagent-x-lite"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.13.5",
+    "web3>=7.16.0",
+]
+
+[project.scripts]
+defiagent-x-lite = "defiagent_x_lite:main"
+
+[build-system]
+requires = ["uv_build>=0.12.7,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.3.0",
+    "matplotlib>=3.11.1",
+    "mypy>=2.3.1",
+    "nbconvert>=7.17.1",
+    "pandas>=3.0.5",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.16.5",
+]
