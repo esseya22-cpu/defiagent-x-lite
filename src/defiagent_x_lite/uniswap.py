@@ -7,10 +7,22 @@ https://github.com/Uniswap/v3-periphery/blob/main/contracts/interfaces/ISwapRout
 
 from __future__ import annotations
 
+from typing import TypedDict
+
 from .canonical import sha256_hex
 from .constants import FEE, POOL, QUOTER_V2, USDC, WETH
 from .domain import TrustedQuote
 from .rpc import POOL_ABI, QUOTER_ABI, AnvilClient
+
+
+class _QuoteBody(TypedDict):
+    token_in: str
+    token_out: str
+    fee: int
+    amount_in: str
+    amount_out: str
+    block_number: int
+    pool_tick: int
 
 
 def pool_tick(client: AnvilClient) -> int:
@@ -20,7 +32,7 @@ def pool_tick(client: AnvilClient) -> int:
 def trusted_quote(client: AnvilClient, *, amount_in: int, provider_note: str) -> TrustedQuote:
     quoter = client.contract(QUOTER_V2, QUOTER_ABI)
     result = quoter.functions.quoteExactInputSingle((WETH, USDC, amount_in, FEE, 0)).call()
-    quote_body = {
+    quote_body: _QuoteBody = {
         "token_in": WETH,
         "token_out": USDC,
         "fee": FEE,

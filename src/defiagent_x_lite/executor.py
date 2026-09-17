@@ -8,7 +8,10 @@ https://eips.ethereum.org/EIPS/eip-20
 
 from __future__ import annotations
 
+from typing import Any, cast
+
 from web3 import Web3
+from web3.types import Wei
 
 from .compiler import compile_action
 from .constants import POOL, SWAP_ROUTER, USDC, WETH, ZERO_ADDRESS
@@ -21,13 +24,13 @@ from .domain import (
 from .rpc import ERC20_ABI, VAULT_ABI, WETH_ABI, AnvilClient
 
 
-def _to_hex_str(value) -> str:
+def _to_hex_str(value: Any) -> str:
     """Return lowercase 0x-prefixed hex string regardless of input type."""
     if isinstance(value, str):
         s = value.lower()
         return s if s.startswith("0x") else "0x" + s
     if hasattr(value, "hex"):
-        h = value.hex()
+        h = cast(str, value.hex())
         return h if h.startswith("0x") else "0x" + h
     return "0x" + bytes(value).hex()
 
@@ -37,7 +40,7 @@ def fund_user_with_weth(client: AnvilClient, *, user: str, amount: int) -> None:
     client.set_balance(user, max(client.w3.eth.get_balance(user), amount + 10**20))
     receipt = client.wait(
         client.contract(WETH, WETH_ABI).functions.deposit().transact(
-            {"from": user, "value": amount, "gas": 150_000}
+            {"from": user, "value": Wei(amount), "gas": 150_000}
         )
     )
     if receipt["status"] != 1:

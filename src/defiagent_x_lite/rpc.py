@@ -15,7 +15,7 @@ from typing import Any
 
 from web3 import Web3
 from web3.contract import Contract
-from web3.types import TxReceipt
+from web3.types import RPCEndpoint, TxReceipt
 
 from .config import Settings
 from .constants import CHAIN_ID, FACTORY, FORK_BLOCK, POOL, QUOTER_V2, SWAP_ROUTER, USDC, WETH
@@ -72,7 +72,7 @@ class AnvilClient:
             raise RuntimeError(f"cannot connect to local Anvil at {settings.local_rpc_url}")
 
     def rpc(self, method: str, params: list[Any]) -> Any:
-        response = self.w3.provider.make_request(method, params)
+        response = self.w3.provider.make_request(RPCEndpoint(method), params)
         if "error" in response:
             raise RuntimeError(f"{method} failed: {response['error']}")
         return response["result"]

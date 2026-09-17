@@ -184,8 +184,12 @@ class QwenPlanner:
             self._tokenizer = tokenizer
             self._model = models.Transformers(causal_model, tokenizer)
             self._sampler = samplers.multinomial(samples=1, temperature=0.7, top_k=20, top_p=0.8)
+        assert self._model is not None
+        assert self._sampler is not None
         self._generators[cache_key] = generate.json(
-            self._model, _workflow_schema(workflow, vault), sampler=self._sampler,
+            self._model,
+            _workflow_schema(workflow, vault),
+            sampler=self._sampler,
         )
         return self._generators[cache_key]
 

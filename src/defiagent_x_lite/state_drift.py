@@ -81,7 +81,12 @@ def apply_tick_drift(client: AnvilClient, *, weth_price_bps: int) -> int:
         balance = int(client.contract(USDC, ERC20_ABI).functions.balanceOf(trader).call())
         maximum = min(balance // 2, 100_000_000 * 10**6)
     else:
-        trader = Web3.to_checksum_address(client.w3.eth.accounts[1])
+        accounts = list(client.w3.eth.accounts)
+        if len(accounts) < 2:
+            raise RuntimeError(
+                "state-drift calibration requires at least two Anvil accounts"
+            )
+        trader = Web3.to_checksum_address(accounts[1])
         token_in, token_out = WETH, USDC
         maximum = 5_000 * 10**18
 
