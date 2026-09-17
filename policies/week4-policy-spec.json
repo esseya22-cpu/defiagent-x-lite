@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "policy_version": "week4-v1",
+  "development_only": true,
+  "chain_id": 1,
+  "fork_block": 20000000,
+  "protocol": "Uniswap V3",
+  "pool": "0x8ad599c3A0ff1De082011EFDDc58f1908eb6e6D8",
+  "fee": 3000,
+  "deadline_seconds_max": 300,
+  "approval_mode": "exact_next_action_amount",
+  "sqrt_price_limit_x96": 0,
+  "workflows": {
+    "W1_APPROVE_SWAP": {
+      "router_minimum_tolerance_bps": 100,
+      "required_order": ["approve_weth", "swap_exact_input_single"]
+    },
+    "W2_APPROVE_SWAP_APPROVE_DEPOSIT": {
+      "router_minimum_tolerance_bps": 200,
+      "minimum_share_tolerance_bps": 100,
+      "required_order": [
+        "approve_weth",
+        "swap_exact_input_single",
+        "approve_exact_received_usdc",
+        "deposit_exact_received_usdc"
+      ]
+    }
+  },
+  "state_envelope_weth_price_bps": [-200, -150, -100, -50, 0, 50, 100, 150, 200],
+  "sources": [
+    "https://arxiv.org/html/2608.17220v1",
+    "https://eips.ethereum.org/EIPS/eip-20",
+    "https://eips.ethereum.org/EIPS/eip-4626",
+    "https://uniswap.org/whitepaper-v3.pdf"
+  ]
+}
+

@@ -1,0 +1,23 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+cache/
+out/
+broadcast/
+results/raw/*.json
+results/raw/*.jsonl
+results/manifests/*.json
+results/week4/
+results/latest-week4-run.json
+results/last-cli-error.json
+!results/raw/.gitkeep
+!results/manifests/.gitkeep
+models/
+
+# Curated, checksum-verified research evidence is intentionally versioned.
+!evidence/
+!evidence/**

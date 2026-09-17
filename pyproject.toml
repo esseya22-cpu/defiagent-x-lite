@@ -1,0 +1,64 @@
+[project]
+name = "defiagent-x-lite"
+version = "0.4.0"
+description = "Deterministic Week-4 feasibility gate for DeFiAgent-X Lite"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+  "datasets==5.0.1",
+  "eth-abi==5.2.0",
+  "jsonschema==4.25.0",
+  "pydantic==2.13.5",
+  "pydantic-settings==2.10.1",
+  "rfc8785==0.1.4",
+  "web3==7.13.0",
+]
+
+[project.optional-dependencies]
+model = [
+  "accelerate==1.10.0",
+  "outlines==0.1.14",
+  "torch==2.8.0",
+  "transformers==4.55.2",
+]
+
+[dependency-groups]
+dev = [
+  "hypothesis==6.138.2",
+  "mypy==1.17.1",
+  "pytest==8.4.1",
+  "pytest-cov==6.2.1",
+  "ruff==0.12.7",
+]
+
+[project.scripts]
+defiagent-week4 = "defiagent_x_lite.cli:main"
+
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/defiagent_x_lite"]
+
+[tool.pytest.ini_options]
+addopts = "-q --strict-markers"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "RUF"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+check_untyped_defs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+no_implicit_optional = true
+warn_return_any = true
+warn_unused_ignores = true
+packages = ["defiagent_x_lite"]
