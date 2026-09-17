@@ -220,11 +220,10 @@ chain-of-thought is requested or stored.
 
 ### Colab GPU path
 
-1. Add only `FORK_RPC_URL` to Colab Secrets and enable notebook access to it.
+1. If the repository is private, configure git credentials in the runtime before running the notebook (e.g., a personal access token in `~/.git-credentials`). Add `FORK_RPC_URL` to Colab Secrets and enable notebook access.
 2. Select a CUDA runtime and run `notebooks/week4_colab.ipynb` from top to
    bottom. The first cell asserts CUDA availability.
-3. The notebook clones the public repository, checks out the exact Phase-A
-   commit, initializes pinned submodules, installs the locked environment, and
+3. The notebook clones the repository at its current main branch, initializes pinned submodules, installs the locked environment, and
    verifies the immutable model revision.
 4. Its gate cell launches Anvil, waits for RPC readiness, runs `doctor`, tests,
    and the 20-repetition gate in the same Python cell, then terminates Anvil in
