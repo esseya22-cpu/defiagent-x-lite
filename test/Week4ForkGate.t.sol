@@ -19,9 +19,9 @@ contract Week4ForkGateTest is Test {
         vm.createSelectFork(vm.envString("FORK_RPC_URL"), ProtocolAddresses.FORK_BLOCK);
         require(block.chainid == ProtocolAddresses.CHAIN_ID, "wrong chain id");
         require(
-            IUniswapV3Factory(ProtocolAddresses.FACTORY).getPool(
-                ProtocolAddresses.WETH, ProtocolAddresses.USDC, ProtocolAddresses.FEE
-            ) == ProtocolAddresses.WETH_USDC_3000_POOL,
+            IUniswapV3Factory(ProtocolAddresses.FACTORY)
+                .getPool(ProtocolAddresses.WETH, ProtocolAddresses.USDC, ProtocolAddresses.FEE)
+            == ProtocolAddresses.WETH_USDC_3000_POOL,
             "pool mismatch"
         );
         vault = new ResearchVault(IERC20(ProtocolAddresses.USDC));
@@ -61,32 +61,34 @@ contract Week4ForkGateTest is Test {
         // https://getfoundry.sh/reference/forge-std/deal/
         deal(ProtocolAddresses.WETH, user, amountIn);
 
-        (uint256 quote,,,) = IQuoterV2(ProtocolAddresses.QUOTER_V2).quoteExactInputSingle(
-            IQuoterV2.QuoteExactInputSingleParams({
-                tokenIn: ProtocolAddresses.WETH,
-                tokenOut: ProtocolAddresses.USDC,
-                amountIn: amountIn,
-                fee: ProtocolAddresses.FEE,
-                sqrtPriceLimitX96: 0
-            })
-        );
+        (uint256 quote,,,) = IQuoterV2(ProtocolAddresses.QUOTER_V2)
+            .quoteExactInputSingle(
+                IQuoterV2.QuoteExactInputSingleParams({
+                    tokenIn: ProtocolAddresses.WETH,
+                    tokenOut: ProtocolAddresses.USDC,
+                    amountIn: amountIn,
+                    fee: ProtocolAddresses.FEE,
+                    sqrtPriceLimitX96: 0
+                })
+            );
 
         // 100 bp is preregistered as the trusted clean minimum: floor(quote * 0.99).
         uint256 minimum = quote * 9_900 / 10_000;
         vm.startPrank(user);
         IERC20(ProtocolAddresses.WETH).approve(ProtocolAddresses.SWAP_ROUTER, amountIn);
-        amountOut = ISwapRouter(ProtocolAddresses.SWAP_ROUTER).exactInputSingle(
-            ISwapRouter.ExactInputSingleParams({
-                tokenIn: ProtocolAddresses.WETH,
-                tokenOut: ProtocolAddresses.USDC,
-                fee: ProtocolAddresses.FEE,
-                recipient: user,
-                deadline: block.timestamp + 300,
-                amountIn: amountIn,
-                amountOutMinimum: minimum,
-                sqrtPriceLimitX96: 0
-            })
-        );
+        amountOut = ISwapRouter(ProtocolAddresses.SWAP_ROUTER)
+            .exactInputSingle(
+                ISwapRouter.ExactInputSingleParams({
+                    tokenIn: ProtocolAddresses.WETH,
+                    tokenOut: ProtocolAddresses.USDC,
+                    fee: ProtocolAddresses.FEE,
+                    recipient: user,
+                    deadline: block.timestamp + 300,
+                    amountIn: amountIn,
+                    amountOutMinimum: minimum,
+                    sqrtPriceLimitX96: 0
+                })
+            );
         vm.stopPrank();
     }
 }
