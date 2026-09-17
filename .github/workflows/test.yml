@@ -1,0 +1,43 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-tests:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11.5"
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.12.7"
+          enable-cache: true
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: "v1.8.1"
+      - name: Install Python dependencies
+        run: uv sync --dev
+      - name: Install pinned OpenZeppelin dependency
+        run: |
+          if [[ ! -d lib/openzeppelin-contracts ]]; then
+            forge install OpenZeppelin/openzeppelin-contracts@v5.4.0 --no-commit
+          fi
+      - name: Python quality gates
+        run: |
+          uv run ruff check src tests
+          uv run mypy src
+          uv run pytest
+      - name: Solidity compile and format
+        run: |
+          forge fmt --check
+          forge build
+
