@@ -237,7 +237,6 @@ chain-of-thought is requested or stored.
 ```bash
 git clone --recurse-submodules https://github.com/esseya22-cpu/defiagent-x-lite.git
 cd defiagent-x-lite
-git checkout <PHASE_A_SOURCE_COMMIT_SHA>
 git submodule update --init --recursive
 cp .env.example .env
 chmod 600 .env
