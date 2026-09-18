@@ -15,7 +15,7 @@ import json
 from dataclasses import dataclass
 from importlib.resources import files
 from time import perf_counter
-from typing import Any
+from typing import Any, cast
 
 from .canonical import canonical_bytes
 from .constants import BPS_DENOMINATOR, FEE, SWAP_ROUTER, USDC, WETH
@@ -110,7 +110,7 @@ def _workflow_schema(workflow: Workflow, vault: str | None = None) -> str:
     defs = schema["$defs"]
 
     def copy_def(name: str) -> dict:
-        return json.loads(json.dumps(defs[name]))
+        return cast(dict, json.loads(json.dumps(defs[name])))
 
     def locked_output_reference() -> dict:
         return {
